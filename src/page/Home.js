@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import Header from "../component/Header";
 import DetailsModal from "../component/DetailsModal";
 import axios from "axios";
+import { useFilter } from "../component/Filterdata";
 
 export default function Home() {
 
@@ -26,6 +27,11 @@ export default function Home() {
   const [Nextindex, setNextindex] = useState(9);
   const [Previousindex, setPreviousindex] = useState(-1);
   const [ShowPreviousBtn, setShowPreviousBtn] = useState(false);
+  const [nameicon, setNameicon] = useState("down");
+  const [departmenticon, setDepartmenticon] = useState("down");
+  const [idicon, setIdicon] = useState("down");
+
+  const { department, updateDepartment, updateList, filter } = useFilter();
 
   let ShowNextBtn = false;
 
@@ -33,7 +39,7 @@ export default function Home() {
   let react = 0;
   let Python = 0;
   let DB = 0;
-  let maxId;
+  let maxId = 0;
 
   Newfdata.map((item) => {
     const dep = item.department;
@@ -84,6 +90,17 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    if (department) {
+      const filteredData = Newfdata.filter((val) =>
+        val.department.toLowerCase().includes(department.toLowerCase())
+      );
+      setFdata(filteredData);
+    } else {
+      setFdata(Newfdata);
+    }
+  }, [department]);
+
+  useEffect(() => {
     const FilteredDepartment = Newfdata.filter((val) =>
       val.department.toLowerCase().includes(Search.toLowerCase())
     )
@@ -110,9 +127,11 @@ export default function Home() {
     }
   }
 
-  Fdata.map((val) => {
-    maxId = val.id;
-  })
+  for (let i = 0; i < Newfdata.length; i++) {
+    if (maxId < Newfdata[i].id) {
+      maxId = Newfdata[i].id;
+    }
+  }
 
   const HandleAddNewReacordBtn = () => {
     setAddmodal(true);
@@ -220,6 +239,48 @@ export default function Home() {
     }
   }
 
+  const handleDepartmentFilter = (dept) => {
+    updateDepartment(dept);
+  };
+
+  const handleListFilter = (title) => {
+    updateList(title);
+  }
+
+  useEffect(() => {
+
+    if (filter === "id") {
+      if (idicon === "up") {
+        setFdata([...Newfdata].sort((a, b) => b.id - a.id))
+        console.log("true")
+      }
+      else {
+        setFdata([...Newfdata].sort((a, b) => a.id - b.id));
+        console.log("false")
+      }
+    }
+
+    else if (filter === "name") {
+      if (nameicon === "up") {
+        setFdata([...Newfdata].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())))
+      }
+      else {
+        setFdata([...Newfdata].sort((a, b) => b.name.toLowerCase().localeCompare(a.name.toLowerCase())))
+      }
+    }
+
+    else if (filter === "department") {
+      if (departmenticon === "up") {
+        setFdata([...Newfdata].sort((a, b) => a.department.toLowerCase().localeCompare(b.department.toLowerCase())))
+      }
+      else {
+        setFdata([...Newfdata].sort((a, b) => b.department.toLowerCase().localeCompare(a.department.toLowerCase())))
+
+      }
+    }
+  }, [Newfdata, filter, idicon, nameicon, departmenticon])
+
+
   return (
     <>
       <Header />
@@ -234,10 +295,10 @@ export default function Home() {
                 <table className="table table-info table-bordered">
                   <thead>
                     <tr>
-                      <th scope="col">React</th>
-                      <th scope="col">Python</th>
-                      <th scope="col">DB</th>
-                      <th scope="col">UI/UX</th>
+                      <th scope="col" onClick={() => handleDepartmentFilter("react")}>React</th>
+                      <th scope="col" onClick={() => handleDepartmentFilter("python")}>Python</th>
+                      <th scope="col" onClick={() => handleDepartmentFilter("db")}>DB</th>
+                      <th scope="col" onClick={() => handleDepartmentFilter("ui/ux")}>UI/UX</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -270,9 +331,10 @@ export default function Home() {
                       <table className="table table-light table-bordered">
                         <thead className="table-header">
                           <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Department</th>
+                            <th scope="col">Id<i className={`ms-2 fa-solid fa-angle-${idicon}`} onClick={() => { return handleListFilter("id"), idicon === "up" ? setIdicon("down") : setIdicon("up") }}></i></th>
+                            <th scope="col">Name<i className={`ms-2 fa-solid fa-angle-${nameicon}`} onClick={() => { return handleListFilter("name"), nameicon === "up" ? setNameicon("down") : setNameicon("up") }}></i></th>
+                            <th scope="col">Department<i className={`ms-2 fa-solid fa-angle-${departmenticon}`} onClick={() => { return handleListFilter("department"), departmenticon === "up" ? setDepartmenticon("down") : setDepartmenticon("up") }}></i></th>
+
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
@@ -397,5 +459,7 @@ export default function Home() {
             }
           </>
       }
-    </>)
+    </>
+  )
 }
+
