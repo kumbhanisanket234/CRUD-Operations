@@ -32,28 +32,57 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
-.table_hight{
+.table_hight {
   height: 648px;
-  overflow-y:auto;
+  overflow-y: auto;
 }
 
-.student-table th,tr td{
+.student-table th,
+tr td {
   border: 1px solid black;
 }
 
-.table-header{
+.table-header {
   position: sticky;
   top: -1px;
   background: white;
-  z-index: 1; 
+  z-index: 1;
 }
 
+.pageNumbers {
+  list-style: none;
+  display: flex;
+}
 
+.pageNumbers li {
+  padding:5px 10px;
+  border: 1px solid black;
+  cursor: pointer;
+  border-radius: 5px;
+}
 
+.pageNumbers li:hover {
+  background-color: #ccc;
+}
 
+.active {
+  background: #ccc;
+  color: black;
+}
 
+.pageNumbers li button {
+  border: none;
+  background-color: transparent;
+  /* font-size: 1.5rem; */
+  cursor: pointer;
+}
+
+.pageNumbers li button:hover{
+  outline: none;
+}

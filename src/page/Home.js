@@ -3,6 +3,7 @@ import Header from "../component/Header";
 import DetailsModal from "../component/DetailsModal";
 import axios from "axios";
 import { useFilter } from "../component/Filterdata";
+import Pagination from "../component/Pagination";
 
 export default function Home() {
 
@@ -24,17 +25,20 @@ export default function Home() {
   const [Id, setId] = useState(0);
   const [AddUpdatebtn, setAddUpdatebtn] = useState("Add");
   const [Modaltitle, setModaltitle] = useState("Add Data");
-  const [Nextindex, setNextindex] = useState(9);
-  const [Previousindex, setPreviousindex] = useState(-1);
-  const [ShowPreviousBtn, setShowPreviousBtn] = useState(false);
   const [nameicon, setNameicon] = useState("down");
   const [departmenticon, setDepartmenticon] = useState("down");
   const [idicon, setIdicon] = useState("down");
+  const { department, updateDepartment, updateList, filter, icon } = useFilter();
 
-  const { department, updateDepartment, updateList, filter } = useFilter();
-
-  let ShowNextBtn = false;
-
+  const [itemsperpage, setItemsperpage] = useState(10);
+  const [currentpage, setCurrentpage] = useState(1);
+  const pages = [];
+  for (let i = 1; i <= Math.ceil(Fdata.length / itemsperpage); i++) {
+    pages.push(i);
+  }
+  const indexOfLastItem = currentpage * itemsperpage;
+  const indexOfFirestItem = indexOfLastItem - itemsperpage;
+  
   let UI = 0;
   let react = 0;
   let Python = 0;
@@ -111,11 +115,15 @@ export default function Home() {
       val.id === Search
     )
 
+    // let thispage = currentpage;
     const FilteredSet = new Set([...FilteredDepartment, ...FilteredName, ...FilteredId])
     const FilteredResults = [...FilteredSet]
     FilteredResults.length > 0 ? setFdata(FilteredResults) : setFdata([]);
 
-  }, [Search])
+    // FilteredResults.length > 0 ? setCurrentpage(1) : setCurrentpage(thispage);
+    // setMaxPageNumberLimit(5)
+    // setMinPageNumberLimit(0)
+  }, [Search, Newfdata])
 
   const DeleteItem = async (id) => {
     try {
@@ -219,24 +227,6 @@ export default function Home() {
     setPhone(val.phone);
     setId(val.id);
     setModaltitle("Update Data")
-  }
-
-  const handleNextBtn = () => {
-    setPreviousindex(Nextindex);
-    setNextindex(pre => pre + 10)
-
-    if (Nextindex >= 9) {
-      setShowPreviousBtn(true);
-    }
-  }
-
-  const handlePreviosBtn = () => {
-    setNextindex(Previousindex);
-    setPreviousindex(pre => pre - 10)
-
-    if (Previousindex <= 9) {
-      setShowPreviousBtn(false);
-    }
   }
 
   const handleDepartmentFilter = (dept) => {
@@ -346,28 +336,25 @@ export default function Home() {
                                 <td colSpan="4">Search Item Not Found</td>
                               </tr>
                               :
-                              Fdata.map((val, index) => {
+                              Fdata.slice(indexOfFirestItem, indexOfLastItem).map((val, index) => {
                                 return (
                                   <>
-                                    {index <= Nextindex && index > Previousindex ?
-                                      <tr key={index}>
+                                    <tr key={index}>
 
-                                        <td>{val.id}</td>
-                                        <td>{val.name}</td>
-                                        <td>{val.department.toUpperCase()}</td>
-                                        <td>
+                                      <td>{val.id}</td>
+                                      <td>{val.name}</td>
+                                      <td>{val.department.toUpperCase()}</td>
+                                      <td>
 
-                                          <button type="button" className="btn btn-danger" onClick={() => DeleteItem(val.id)}>Delete</button>
-                                          <button type="button" className="btn btn-warning ms-2" onClick={() => OpenUpdateModal(val)}>Update</button>
-                                          <button type="button" className="btn btn-primary ms-2" onClick={() => handleShow(val)}>More</button>
+                                        <button type="button" className="btn btn-danger" onClick={() => DeleteItem(val.id)}>Delete</button>
+                                        <button type="button" className="btn btn-warning ms-2" onClick={() => OpenUpdateModal(val)}>Update</button>
+                                        <button type="button" className="btn btn-primary ms-2" onClick={() => handleShow(val)}>More</button>
 
-                                        </td>
-                                      </tr>
-                                      : null
-                                    }
-                                    {
-                                      Nextindex >= Fdata.length - 1 ? ShowNextBtn = false : ShowNextBtn = true
-                                    }
+                                      </td>
+                                    </tr>
+
+
+
                                   </>
                                 )
                               })
@@ -429,7 +416,6 @@ export default function Home() {
                                   Email:<input type="email" className="form-control" value={Email} onChange={(evt) => { setEmail(evt.target.value) }} />
                                   Phone:<input type="tel" className="form-control" value={Phone} onChange={(evt) => { setPhone(evt.target.value) }} />
                                   salary:<input type="text" className="form-control" value={Salary} onChange={(evt) => { setSalary(evt.target.value) }} />
-
                                 </div>
                                 <div className="modal-footer">
                                   <button className="btn btn-success" onClick={AddNewData}>{AddUpdatebtn}</button>
@@ -443,16 +429,9 @@ export default function Home() {
                           <div className="modal-backdrop show"></div>
                         </>
                       )}
-                      {
-                        ShowPreviousBtn &&
-                        <button className="btn btn-success" onClick={handlePreviosBtn}>Previous</button>
-                      }
-                      {
-                        ShowNextBtn &&
-                        <button className="btn btn-success ms-2" onClick={handleNextBtn}>Next</button>
-                      }
-                    </div>
 
+                    </div>
+                    <Pagination currentpage={currentpage} setCurrentpage={setCurrentpage} pages={pages}/>
                     <DetailsModal />
                   </div>
                 </div>
