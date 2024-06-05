@@ -91,7 +91,6 @@ export default function Home() {
 
   useEffect(() => {
     FetchData();
-
   }, []);
 
   useEffect(() => {
@@ -121,7 +120,9 @@ export default function Home() {
     const FilteredResults = [...FilteredSet]
     FilteredResults.length > 0 ? setFdata(FilteredResults) : setFdata([]);
 
-    setCurrentpage(1);
+    // FilteredResults.length > 0 ? setCurrentpage(1) : setCurrentpage(thispage);
+    // setMaxPageNumberLimit(5)
+    // setMinPageNumberLimit(0)
   }, [Search, Newfdata])
 
   const DeleteItem = async (id) => {
@@ -348,11 +349,9 @@ export default function Home() {
                                       <td>{val.name}</td>
                                       <td>{val.department.toUpperCase()}</td>
                                       <td>
-
                                         <button type="button" className="btn btn-danger" onClick={() => DeleteItem(val.id)}>Delete</button>
                                         <button type="button" className="btn btn-warning ms-2" onClick={() => OpenUpdateModal(val)}>Update</button>
                                         <button type="button" className="btn btn-primary ms-2" onClick={() => handleShow(val)}>More</button>
-
                                       </td>
                                     </tr>
                                   </>
@@ -395,6 +394,20 @@ export default function Home() {
                             Modaltitle={Modaltitle}
                           />
                         </>
+                      )}
+
+                    </div >
+                    <Pagination currentpage={currentpage} setCurrentpage={setCurrentpage} pages={pages} />
+                  </div >
+                </div >
+            }
+          </>
+      }
+    </>
+  )
+}
+
+/>
                       )}
 
                     </div >
