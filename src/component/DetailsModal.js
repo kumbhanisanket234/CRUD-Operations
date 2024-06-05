@@ -6,11 +6,11 @@ export default function DetailsModal({ Exp, Salary, Phone, Email, Name, setName,
 
   return (
     <>
-      <div className="modal show" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+      <div className="modal show text-dark" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
 
-            <div className="modal-header">
+            <div className="modal-header">  
               <h5 className="modal-title">{Modaltitle}</h5>
               <button type="button" className="close" aria-label="Close" onClick={handleClose}>
                 <span aria-hidden="true">&times;</span>

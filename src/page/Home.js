@@ -4,7 +4,6 @@ import DetailsModal from "../component/DetailsModal";
 import axios from "axios";
 import { useFilter } from "../component/Filterdata";
 import Pagination from "../component/Pagination";
-import AddNewDataModal from "../component/Modals/AddNewDataModal";
 
 export default function Home() {
 
@@ -29,7 +28,8 @@ export default function Home() {
   const [nameicon, setNameicon] = useState("down");
   const [departmenticon, setDepartmenticon] = useState("down");
   const [idicon, setIdicon] = useState("down");
-  const { department, updateDepartment, updateList, filter } = useFilter();
+  const { department, updateDepartment, updateList, filter,themeMode } = useFilter();
+
 
   const [itemsperpage, setItemsperpage] = useState(10);
   const [currentpage, setCurrentpage] = useState(1);
@@ -93,17 +93,6 @@ export default function Home() {
     FetchData();
 
   }, []);
-
-  useEffect(() => {
-    if (department) {
-      const filteredData = Newfdata.filter((val) =>
-        val.department.toLowerCase().includes(department.toLowerCase())
-      );
-      setFdata(filteredData);
-    } else {
-      setFdata(Newfdata);
-    }
-  }, [department]);
 
   useEffect(() => {
 
@@ -241,19 +230,28 @@ export default function Home() {
     updateDepartment(dept);
   };
 
+  useEffect(() => {
+    if (department) {
+      const filteredData = Newfdata.filter((val) =>
+        val.department.toLowerCase().includes(department.toLowerCase())
+      );
+      setFdata(filteredData);
+    } else {
+      setFdata(Newfdata);
+    }
+  }, [department]);
+
   const handleListFilter = (title) => {
     updateList(title);
   }
 
   useEffect(() => {
-
     if (filter === "id") {
       if (idicon === "up") {
         setFdata([...Newfdata].sort((a, b) => b.id - a.id))
       }
       else {
         setFdata([...Newfdata].sort((a, b) => a.id - b.id));
-
       }
     }
 
@@ -265,6 +263,7 @@ export default function Home() {
         setFdata([...Newfdata].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())))
       }
     }
+
     else if (filter === "department") {
       if (departmenticon === "up") {
         setFdata([...Newfdata].sort((a, b) => b.department.toLowerCase().localeCompare(a.department.toLowerCase())))
@@ -274,136 +273,137 @@ export default function Home() {
       }
     }
   }, [Newfdata, filter, idicon, nameicon, departmenticon])
-  var hello = "hello";
+
   return (
     <>
+      <div className={themeMode ? "bg-dark text-light" : "bg-light text-dark"}>
       <Header />
-      {
-        Load
-          ? <p>Loading...</p>
-          :
-          <>
-            <div className="mt-4">
-              <h5 className="mb-3">Technology Overview</h5>
-              <div className="container">
-                <table className="table table-info table-bordered">
-                  <thead>
-                    <tr>
-                      <th scope="col" onClick={() => handleDepartmentFilter("react")}>React</th>
-                      <th scope="col" onClick={() => handleDepartmentFilter("python")}>Python</th>
-                      <th scope="col" onClick={() => handleDepartmentFilter("db")}>DB</th>
-                      <th scope="col" onClick={() => handleDepartmentFilter("ui/ux")}>UI/UX</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{react}</td>
-                      <td>{Python}</td>
-                      <td>{DB}</td>
-                      <td>{UI}</td>
-                    </tr>
-                  </tbody>
-                </table>
+        {
+          Load
+            ? <p>Loading...</p>
+            :
+            <>
+              <div className="mt-4">
+                <h5 className="mb-3">Technology Overview</h5>
+                <div className="container">
+                  <table className="table table-info table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col"><span onClick={() => handleDepartmentFilter("react")}>React</span></th>
+                        <th scope="col"><span onClick={() => handleDepartmentFilter("python")}>Python</span></th>
+                        <th scope="col"><span onClick={() => handleDepartmentFilter("db")}>DB</span></th>
+                        <th scope="col"><span onClick={() => handleDepartmentFilter("ui/ux")}>UI/UX</span></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{react}</td>
+                        <td>{Python}</td>
+                        <td>{DB}</td>
+                        <td>{UI}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
 
-            {
-              Reject
-                ? <h1 style={{ color: '#ccc' }}>Data Not Found</h1>
-                :
-                <div className="mt-5">
-                  <h5 className="mb-3">Employee List</h5>
-                  <div className="container">
+              {
+                Reject
+                  ? <h1 style={{ color: '#ccc' }}>Data Not Found</h1>
+                  :
+                  <div className="mt-5">
+                    <h5 className="mb-3">Employee List</h5>
+                    <div className="container">
 
+                      <div className="input d-flex justify-content-between mx-3 mb-3">
+                        <input type="text" className="form-control" style={{ width: '300px' }} placeholder="Search..." onChange={(evt) => { setSearch(evt.target.value) }} />
+                        <button className="btn btn-success me-3" onClick={HandleAddNewReacordBtn}>AddNewRecord</button>
+                      </div>
 
-                    <div className="input d-flex justify-content-between mx-3 mb-3">
-                      <input type="text" className="form-control" style={{ width: '300px' }} placeholder="Search..." onChange={(evt) => { setSearch(evt.target.value) }} />
-                      <button className="btn btn-success me-3" onClick={HandleAddNewReacordBtn}>AddNewRecord</button>
-                    </div>
+                      <div className="container table_hight">
+                        <table className="table table-info table-bordered">
+                          <thead className="table-header">
+                            <tr>
+                              <th scope="col">Id<i className={`ms-2 fa-solid fa-angle-${idicon}`} onClick={() => { return handleListFilter("id"), idicon === "up" ? setIdicon("down") : setIdicon("up") }}></i></th>
+                              <th scope="col">Name<i className={`ms-2 fa-solid fa-angle-${nameicon}`} onClick={() => { return handleListFilter("name"), nameicon === "up" ? setNameicon("down") : setNameicon("up") }}></i></th>
+                              <th scope="col">Department<i className={`ms-2 fa-solid fa-angle-${departmenticon}`} onClick={() => { return handleListFilter("department"), departmenticon === "up" ? setDepartmenticon("down") : setDepartmenticon("up") }}></i></th>
+                              <th scope="col">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
 
-                    <div className="container table_hight">
-                      <table className="table table-bordered">
-                        <thead className="table-header">
-                          <tr>
-                            <th scope="col">Id<i className={`ms-2 fa-solid fa-angle-${idicon}`} onClick={() => { return handleListFilter("id"), idicon === "up" ? setIdicon("down") : setIdicon("up") }}></i></th>
-                            <th scope="col">Name<i className={`ms-2 fa-solid fa-angle-${nameicon}`} onClick={() => { return handleListFilter("name"), nameicon === "up" ? setNameicon("down") : setNameicon("up") }}></i></th>
-                            <th scope="col">Department<i className={`ms-2 fa-solid fa-angle-${departmenticon}`} onClick={() => { return handleListFilter("department"), departmenticon === "up" ? setDepartmenticon("down") : setDepartmenticon("up") }}></i></th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                            {
+                              Fdata.length === 0
+                                ? <tr>
+                                  <td colSpan="4">Search Item Not Found</td>
+                                </tr>
+                                :
+                                Fdata.slice(indexOfFirstItem, indexOfLastItem).map((val, index) => {
+                                  return (
+                                    <>
+                                      <tr key={index}>
 
-                          {
-                            Fdata.length === 0
-                              ? <tr>
-                                <td colSpan="4">Search Item Not Found</td>
-                              </tr>
-                              :
-                              Fdata.slice(indexOfFirstItem, indexOfLastItem).map((val, index) => {
-                                return (
-                                  <>
-                                    <tr key={index}>
+                                        <td>{val.id}</td>
+                                        <td>{val.name}</td>
+                                        <td>{val.department.toUpperCase()}</td>
+                                        <td>
 
-                                      <td>{val.id}</td>
-                                      <td>{val.name}</td>
-                                      <td>{val.department.toUpperCase()}</td>
-                                      <td>
+                                          <button type="button" className="btn btn-danger" onClick={() => DeleteItem(val.id)}>Delete</button>
+                                          <button type="button" className="btn btn-warning ms-2" onClick={() => OpenUpdateModal(val)}>Update</button>
+                                          <button type="button" className="btn btn-primary ms-2" onClick={() => handleShow(val)}>More</button>
 
-                                        <button type="button" className="btn btn-danger" onClick={() => DeleteItem(val.id)}>Delete</button>
-                                        <button type="button" className="btn btn-warning ms-2" onClick={() => OpenUpdateModal(val)}>Update</button>
-                                        <button type="button" className="btn btn-primary ms-2" onClick={() => handleShow(val)}>More</button>
+                                        </td>
+                                      </tr>
+                                    </>
+                                  )
+                                })
+                            }
+                          </tbody>
+                        </table>
 
-                                      </td>
-                                    </tr>
-                                  </>
-                                )
-                              })
-                          }
-                        </tbody>
-                      </table>
+                        {ShowModal && (
+                          <>
+                            <DetailsModal
+                              Email={Email}
+                              Phone={Phone}
+                              Exp={Exp}
+                              Salary={Salary}
+                              handleClose={handleClose}
+                              Modaltitle={Modaltitle}
+                            />
+                          </>
+                        )}
+                        {Addmodal && (
+                          <>
+                            <DetailsModal
+                              Name={Name}
+                              setName={setName}
+                              Department={Department}
+                              setDepartment={setDepartment}
+                              Exp={Exp}
+                              setExp={setExp}
+                              Email={Email}
+                              setEmail={setEmail}
+                              Phone={Phone}
+                              setPhone={setPhone}
+                              Salary={Salary}
+                              setSalary={setSalary}
+                              handleClose={handleClose}
+                              AddUpdatebtn={AddUpdatebtn}
+                              AddNewData={AddNewData}
+                              Modaltitle={Modaltitle}
+                            />
+                          </>
+                        )}
 
-                      {ShowModal && (
-                        <>
-                          <DetailsModal
-                            Email={Email}
-                            Phone={Phone}
-                            Exp={Exp}
-                            Salary={Salary}
-                            handleClose={handleClose}
-                            Modaltitle={Modaltitle}
-                          />
-                        </>
-                      )}
-                      {Addmodal && (
-                        <>
-                          <DetailsModal
-                            Name={Name}
-                            setName={setName}
-                            Department={Department}
-                            setDepartment={setDepartment}
-                            Exp={Exp}
-                            setExp={setExp}
-                            Email={Email}
-                            setEmail={setEmail}
-                            Phone={Phone}
-                            setPhone={setPhone}
-                            Salary={Salary}
-                            setSalary={setSalary}
-                            handleClose={handleClose}
-                            AddUpdatebtn={AddUpdatebtn}
-                            AddNewData={AddNewData}
-                            Modaltitle={Modaltitle}
-                          />
-                        </>
-                      )}
-
+                      </div >
+                      <Pagination currentpage={currentpage} setCurrentpage={setCurrentpage} pages={pages} />
                     </div >
-                    <Pagination currentpage={currentpage} setCurrentpage={setCurrentpage} pages={pages} />
                   </div >
-                </div >
-            }
-          </>
-      }
+              }
+            </>
+        }
+      </div>
     </>
   )
 }

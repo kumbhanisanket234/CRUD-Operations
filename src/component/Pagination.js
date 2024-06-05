@@ -1,6 +1,10 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
+// import { useTheme } from './Theme';
+import { useFilter } from './Filterdata';
 
-function Pagination({currentpage,setCurrentpage,pages}) {
+function Pagination({ currentpage, setCurrentpage, pages }) {
+
+  const { themeMode } = useFilter();
 
   const [pageNumberLimit, setPageNumberLimit] = useState(5);
   const [maxPageNumberLimit, setMaxPageNumberLimit] = useState(5);
@@ -26,6 +30,7 @@ function Pagination({currentpage,setCurrentpage,pages}) {
       setMinPageNumberLimit(minPageNumberLimit - pageNumberLimit)
     }
   }
+
   let pageIncrementBtn = null;
   if (pages.length > maxPageNumberLimit) {
     pageIncrementBtn = <li onClick={handleNextBtn}>&hellip;</li>
@@ -49,7 +54,7 @@ function Pagination({currentpage,setCurrentpage,pages}) {
 
   return (
     <div className="d-flex justify-content-center">
-      <ul className="pageNumbers">
+      <ul className={`pageNumbers ${themeMode ? "dark-pagination" : "pageNumbers"}`}>
         <li>
           <button onClick={handlePreviousBtn}
             disabled={currentpage == pages[0] ? true : false}><i className="fa-solid fa-arrow-left"></i></button>

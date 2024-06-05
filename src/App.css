@@ -1,18 +1,5 @@
-
 .App {
   text-align: center;
-  background-color: #5188a8;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
 }
 
 .App-header {
@@ -25,20 +12,6 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .table_hight {
   height: 648px;
   overflow-y: auto;
@@ -49,31 +22,24 @@ tr td {
   border: 1px solid black;
 }
 
-.table-header {
-  position: sticky;
-  top: -1px;
-  /* background: white; */
-  z-index: 1;
-}
-
 .pageNumbers {
   list-style: none;
   display: flex;
 }
 
 .pageNumbers li {
-  padding:5px 10px;
+  padding: 5px 10px;
   border: 1px solid black;
   cursor: pointer;
   border-radius: 5px;
 }
 
 .pageNumbers li:hover {
-  background-color: #ccc;
+  background-color: #7c7b7b;
 }
 
 .active {
-  background: #ccc;
+  background: #7c7b7b;
   color: black;
 }
 
@@ -84,10 +50,19 @@ tr td {
   cursor: pointer;
 }
 
-.pageNumbers li button:hover{
+.pageNumbers li button:hover {
   outline: none;
 }
 
-.table{
-  background-color: #5188a8;
+.table thead tr th span:hover {
+  cursor: pointer;
+}
+
+.dark-pagination li {
+  color: white;
+  border: 1px solid white;
+}
+
+.dark-pagination li i {
+  color: white;
 }
