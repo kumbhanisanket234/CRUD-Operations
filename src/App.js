@@ -9,6 +9,7 @@ function App() {
       <FilterProvider>
         <BrowserRouter>
           <Home />
+          
         </BrowserRouter>
       </FilterProvider>
     </div>

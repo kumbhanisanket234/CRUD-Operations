@@ -12,7 +12,6 @@ function Pagination({currentpage,setCurrentpage,pages}) {
 
   const handleNextBtn = () => {
     setCurrentpage(currentpage + 1);
-
     if (currentpage + 1 > maxPageNumberLimit) {
       setMaxPageNumberLimit(maxPageNumberLimit + pageNumberLimit);
       setMinPageNumberLimit(minPageNumberLimit + pageNumberLimit)
@@ -53,14 +52,14 @@ function Pagination({currentpage,setCurrentpage,pages}) {
       <ul className="pageNumbers">
         <li>
           <button onClick={handlePreviousBtn}
-            disabled={currentpage == pages[0] ? true : false}><i class="fa-solid fa-arrow-left"></i></button>
+            disabled={currentpage == pages[0] ? true : false}><i className="fa-solid fa-arrow-left"></i></button>
         </li>
         {pageDecrementBtn}
         {randerPagenumber}
         {pageIncrementBtn}
         <li>
           <button onClick={handleNextBtn}
-            disabled={currentpage == pages[pages.length - 1] ? true : false}><i class="fa-solid fa-arrow-right"></i></button>
+            disabled={currentpage == pages[pages.length - 1] ? true : false}><i className="fa-solid fa-arrow-right"></i></button>
         </li>
       </ul>
     </div>

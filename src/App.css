@@ -1,5 +1,7 @@
+
 .App {
   text-align: center;
+  background-color: #5188a8;
 }
 
 .App-logo {
@@ -14,7 +16,6 @@
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -51,7 +52,7 @@ tr td {
 .table-header {
   position: sticky;
   top: -1px;
-  background: white;
+  /* background: white; */
   z-index: 1;
 }
 
@@ -85,4 +86,8 @@ tr td {
 
 .pageNumbers li button:hover{
   outline: none;
+}
+
+.table{
+  background-color: #5188a8;
 }

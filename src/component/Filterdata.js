@@ -16,7 +16,7 @@ function FilterProvider({ children }) {
     }
 
     return (
-        <FilterContext.Provider value={{ department,filter, updateDepartment, updateList }}>
+        <FilterContext.Provider value={{ department, filter, updateDepartment, updateList }}>
             {children}
         </FilterContext.Provider>
     );
@@ -26,4 +26,4 @@ function useFilter() {
     return useContext(FilterContext);
 }
 
-export { FilterProvider, useFilter };
+export { FilterProvider, useFilter }

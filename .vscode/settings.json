@@ -1,0 +1,7 @@
+{
+    "editor.cursorBlinking": "blink",
+    "editor.fontSize": 17,
+    "editor.formatOnType": true,
+    "editor.find.autoFindInSelection": "never",
+    "editor.inlineSuggest.showToolbar": "onHover"
+}
